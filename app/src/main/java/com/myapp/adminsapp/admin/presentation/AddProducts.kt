@@ -74,7 +74,7 @@ fun AddProductScreen() {
                     onResult = { uris -> selectedImageUris = uris }
                 )
                 var name = remember {
-                    mutableStateOf("")
+                    mutableStateOf("12")
                 }
                 var quantity = remember {
                     mutableStateOf("")
