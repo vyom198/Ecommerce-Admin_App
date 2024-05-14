@@ -77,7 +77,7 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.storage)
     implementation(libs.coil)
-
+    implementation(libs.material.icon.extended)
     implementation(libs.coroutine.lifecycle.viewmodel)
     implementation(libs.lifecycle.viewmodel.compose)
 
