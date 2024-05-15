@@ -2,21 +2,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.myapp.adminsapp.admin.presentation.AddProductScreen
-import com.myapp.adminsapp.admin.presentation.HomeScreen
-import com.myapp.adminsapp.admin.presentation.OrderedProducts
+import com.myapp.adminsapp.addproduct.presentation.AddProductScreen
+import com.myapp.adminsapp.home.presentation.HomeScreen
+import com.myapp.adminsapp.addproduct.presentation.OrderedProducts
 
 
 sealed class BottomNavScreen(

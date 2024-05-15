@@ -13,6 +13,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -36,4 +39,11 @@ object FirebaseModule {
     @Provides
     fun providesFirebaseStorage(): FirebaseStorage= Firebase.storage
 
+    @IoDispatcher
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
 }
+@Retention
+@Qualifier
+annotation class IoDispatcher

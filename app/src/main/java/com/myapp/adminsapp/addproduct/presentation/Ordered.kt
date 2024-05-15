@@ -1,4 +1,4 @@
-package com.myapp.adminsapp.admin.presentation
+package com.myapp.adminsapp.addproduct.presentation
 
 import androidx.compose.runtime.Composable
 

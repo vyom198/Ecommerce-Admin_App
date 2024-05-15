@@ -1,16 +1,13 @@
-package com.myapp.adminsapp.admin.presentation
+package com.myapp.adminsapp.addproduct.presentation
 
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,19 +17,14 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddPhotoAlternate
-import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.Category
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,9 +41,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.myapp.adminsapp.R
 import com.myapp.adminsapp.core.composables.ProductEditTxtField
+import com.myapp.adminsapp.core.composables.TextfielDropDown
 import com.myapp.adminsapp.core.composables.horizontalSpacer
 import com.myapp.adminsapp.core.composables.verticalSpacer
-import com.myapp.adminsapp.ui.theme.AdminsAppTheme
 import com.myapp.adminsapp.ui.theme.Saffron
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ResourceAsColor")
@@ -65,6 +56,18 @@ fun AddProductScreen() {
                         title = { Text(text = "Add Product") },
                     )
                 }) {
+                val list  = listOf<String>(
+                    "All", "Munchies" , "Dairy" , "Grains"
+                )
+                val expandedValue = remember {
+                    mutableStateOf(false)
+                }
+                val expandedValue2 = remember {
+                    mutableStateOf(false)
+                }
+                val expandedValue3 = remember {
+                    mutableStateOf(false)
+                }
                 var selectedImageUris by remember {
                     mutableStateOf<List<Uri>>(emptyList())
                 }
@@ -73,23 +76,25 @@ fun AddProductScreen() {
                     contract = ActivityResultContracts.PickMultipleVisualMedia(),
                     onResult = { uris -> selectedImageUris = uris }
                 )
-                var name = remember {
-                    mutableStateOf("12")
-                }
-                var quantity = remember {
+                val name = remember {
                     mutableStateOf("")
                 }
-                var unit = remember {
+                val quantity = remember {
                     mutableStateOf("")
                 }
-                var price = remember {
+                val unit = remember {
                     mutableStateOf("")
                 }
-                var productCategory = remember {
+                val price = remember {
                     mutableStateOf("")
                 }
-
-                var productType = remember {
+                val productCategory = remember {
+                    mutableStateOf("")
+                }
+                val noOfStock = remember {
+                    mutableStateOf("")
+                }
+                val productType = remember {
                     mutableStateOf("")
                 }
 
@@ -122,7 +127,8 @@ fun AddProductScreen() {
                             width = 170.dp,
                         )
                         horizontalSpacer(8.dp)
-                        ProductEditTxtField(title = unit, label = "unit", width = 170.dp)
+                        TextfielDropDown(category = list, title = unit, label ="unit" ,
+                            expanded = expandedValue,width = 170.dp )
 
                     }
                     verticalSpacer(dp = 8.dp)
@@ -133,11 +139,14 @@ fun AddProductScreen() {
                     ) {
                         ProductEditTxtField(title = price, label = "price", width = 170.dp,)
                         horizontalSpacer(8.dp)
-                        ProductEditTxtField(title = unit, label = "no of stock", width = 170.dp)
-
+                        ProductEditTxtField(title = noOfStock, label = "No. of Stock", width = 170.dp,)
                     }
-                    ProductEditTxtField(title = productCategory, label = "product category")
-                    ProductEditTxtField(title = productType, label = "product type")
+
+                    TextfielDropDown(category = list, title =  productCategory, label ="product category" ,
+                        expanded = expandedValue3 , leadingIcon = Icons.Default.Category)
+                    TextfielDropDown(category = list, title = productType, label ="product type" ,
+                        expanded = expandedValue2,leadingIcon = Icons.Default.Category )
+
                     verticalSpacer()
                     Row(
                         modifier = Modifier.width(340.dp),
@@ -173,7 +182,9 @@ fun AddProductScreen() {
                     }
 
                     Button(onClick = { /*TODO*/ },
-                        modifier = Modifier.width(340.dp).height(50.dp),
+                        modifier = Modifier
+                            .width(340.dp)
+                            .height(50.dp),
                         colors = ButtonColors(
                         containerColor = Saffron, contentColor = Color.White, disabledContainerColor = Saffron,
                         disabledContentColor = Saffron
