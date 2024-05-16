@@ -3,6 +3,8 @@ package com.myapp.adminsapp.auth.presentation
 import AuthScreen
 import BottomNavScreen
 import android.app.Activity
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +20,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +53,8 @@ fun LoginWithPhone(
     navController: NavHostController,
     activity: Activity
 ) {
+
+
     var isDialog by remember{ mutableStateOf(false)}
     var phoneNo by remember {
         mutableStateOf("")

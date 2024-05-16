@@ -2,6 +2,7 @@ package com.myapp.adminsapp.auth.domain
 
 import android.app.Activity
 import com.myapp.adminsapp.auth.data.Admin
+import com.myapp.adminsapp.auth.data.SignInResult
 import com.myapp.adminsapp.core.common.ResultState
 import kotlinx.coroutines.flow.Flow
 
@@ -14,6 +15,6 @@ interface PhoneAuthRepo {
 
     fun signWithCredential(
         otp:String
-    ): Flow<ResultState<String>>
-
+    ): Flow<ResultState<SignInResult>>
+   fun getSignInUser(): Admin?
 }

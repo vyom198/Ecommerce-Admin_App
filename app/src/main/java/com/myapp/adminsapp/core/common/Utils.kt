@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 
 const val OTP_VIEW_TYPE_NONE = 0
 const val OTP_VIEW_TYPE_UNDERLINE = 1
@@ -158,3 +157,15 @@ fun Context.showMsg(
     msg:String,
     duration:Int = Toast.LENGTH_SHORT
 ) = Toast.makeText(this,msg,duration).show()
+
+val Unitlist = listOf<String>(
+    "Kg","ml","Ltr","Packets","gm"
+)
+val ProductCategory = listOf(
+    "Vegetables & Fruits", "Atta,Rice & Dal" ,
+    "Oil,Ghee & Masala" , "Sweets & Chocolates", "Chips & Namkeen",
+    "Bath & Body" , "Hair", "Cleaners & Repellents" , "Electronics"
+)
+ val ProductType = listOf(
+     "Grocery & Kitchen" , "Snacks & Drinks" , "Beauty & Personal Care","Household Essentials"
+ )

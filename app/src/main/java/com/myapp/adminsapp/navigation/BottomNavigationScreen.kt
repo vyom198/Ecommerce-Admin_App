@@ -7,6 +7,7 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -80,7 +81,7 @@ fun HomeNavGraph(navController: NavHostController) {
 
         composable(route = BottomNavScreen.AddProduct.route) {
             AddProductScreen(
-
+             viewmodel = hiltViewModel()
             )
         }
             composable(route = BottomNavScreen.Ordered.route) {

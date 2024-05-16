@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.myapp.adminsapp.addproduct.data.RealtimeProduct
 import com.myapp.adminsapp.core.common.ResultState
 import com.myapp.adminsapp.core.dataprovider.di.IoDispatcher
 import com.myapp.adminsapp.core.dataprovider.domain.FirebaseRepo
@@ -27,13 +28,15 @@ class FireBaseRepoImpl  @Inject constructor(
 
 
 
-        override suspend fun insert(item: RealtimeModelResponse.Product): ResultState<Any> {
+        override suspend fun insert(item: RealtimeProduct.Product): ResultState<Any> {
             return try {
                 withContext(ioDispatcher) {
 
                     val addTaskTimeout = withTimeoutOrNull(10000L) {
                         db.collection("AllProduct")
-                            .add(item)
+                            .add(item).addOnCompleteListener {
+                                db.collection(item.productCategory.toString()).add(item)
+                            }
                     }
 
                     if (addTaskTimeout == null) {
@@ -48,28 +51,9 @@ class FireBaseRepoImpl  @Inject constructor(
                 ResultState.Failure(exception = exception)
             }
         }
-        override suspend fun addImageToFirebaseStorage(imageUri: Uri): ResultState<Uri> {
-            return try {
-                val  imageref =  storagedb.reference.child("Images").child("images/${UUID.randomUUID()}")
-                val uploadTask =imageref.putFile(imageUri).await()
-                Log.d("repo", uploadTask.toString())
-                val downloadUrl = imageref.downloadUrl.await()
-                Log.d("repo", downloadUrl.toString())
-                // Return the download URL
-                ResultState.Success(downloadUrl)
-            } catch (e: FirebaseNetworkException) {
-                // Handle network-related errors
-                ResultState.Failure(exception = e)
-            } catch (e: Exception) {
-                // Catch any other unexpected exceptions
-                Log.e("ERROR", "Unexpected error: $e")
-                ResultState.Failure(exception = e)
-            }
-        }
 
 
-
-        override suspend fun getItems(): Flow<ResultState<List<RealtimeModelResponse>>> = callbackFlow{
+        override suspend fun getItems(): Flow<ResultState<List<RealtimeProduct>>> = callbackFlow{
             trySend(ResultState.Loading)
             val listenerRegistration = db.collection("AllProducts")
                 .addSnapshotListener { snapshot, exception ->
@@ -80,12 +64,18 @@ class FireBaseRepoImpl  @Inject constructor(
 
                     snapshot?.let {
                         val items = it.documents.map { document ->
-                            RealtimeModelResponse(
-                                item = RealtimeModelResponse.Product(
+                            RealtimeProduct(
+                                item = RealtimeProduct.Product(
                                     product = document["product"] as String?,
-                                    description = document["description"] as String?,
-                                    price = document["price"] as String?,
-                                    image = document["image"] as String?
+                                    price = document["price"] as Int?,
+                                    productQuantity = document["productQuantity"] as Int?,
+                                    productUnit = document["productUnit"] as String?,
+                                    productStock = document["productStock"] as Int?,
+                                    productCategory = document["productCategory"] as String?,
+                                    productType = document["productType"] as String?,
+                                    ItemCount = document["itemCount"] as Int?,
+                                    productImageUris = document["productImageUris"] as List<String>?
+
                                 ),
                                 key = document.id
                             )
@@ -116,13 +106,18 @@ class FireBaseRepoImpl  @Inject constructor(
             }
         }
 
-        override fun update(item: RealtimeModelResponse): Flow<ResultState<String>> = callbackFlow{
+        override fun update(item: RealtimeProduct): Flow<ResultState<String>> = callbackFlow{
             trySend(ResultState.Loading)
             val map = HashMap<String,Any>()
             map["product"] = item.item?.product!!
-            map["description"] = item.item.description!!
             map["price"] = item.item.price!!
-            map["image"] = item.item.image!!
+            map["productCategory"] = item.item.productCategory!!
+            map["productQuantity"] = item.item.productQuantity!!
+            map["productType"]= item.item.productType!!
+            map["productUnit"] = item.item.productUnit!!
+            map["productStock"] = item.item.productStock!!
+            map["itemCount"] = item.item.ItemCount!!
+            map["productImageUris"] = item.item.productImageUris!!
             db.collection("AllProducts")
                 .document(item.key!!)
                 .update(map)
@@ -137,6 +132,28 @@ class FireBaseRepoImpl  @Inject constructor(
             }
         }
 
-
+    override suspend fun addImagesToFirebaseStorage(imageUris: List<Uri>): ResultState<MutableList<Uri>> {
+        val results = mutableListOf<Uri>()
+        return try {
+            imageUris.forEach {
+                val imageref =
+                    storagedb.reference.child("Images").child("images/${UUID.randomUUID()}")
+                val uploadTask = imageref.putFile(it).await()
+                Log.d("repo", uploadTask.toString())
+                val downloadUrl = imageref.downloadUrl.await()
+                Log.d("repo", downloadUrl.toString())
+                results.add(downloadUrl)
+            }
+            ResultState.Success(data = results)
+        } catch (e: FirebaseNetworkException) {
+            ResultState.Failure(exception = e)
+        } catch (e: Exception) {
+            // Catch any other unexpected exceptions
+            Log.e("ERROR", "Unexpected error: $e")
+            ResultState.Failure(exception = e)
+        }
     }
+
+
+}
 

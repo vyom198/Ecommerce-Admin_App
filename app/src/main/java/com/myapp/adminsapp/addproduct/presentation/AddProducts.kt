@@ -3,6 +3,7 @@ package com.myapp.adminsapp.addproduct.presentation
 import android.annotation.SuppressLint
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,32 +35,51 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.myapp.adminsapp.R
+import com.myapp.adminsapp.addproduct.data.RealtimeProduct
+import com.myapp.adminsapp.addproduct.domain.AddproductViewmodel
+import com.myapp.adminsapp.core.common.CommonDialog
+import com.myapp.adminsapp.core.common.ProductCategory
+import com.myapp.adminsapp.core.common.ProductType
+import com.myapp.adminsapp.core.common.Unitlist
+import com.myapp.adminsapp.core.common.showMsg
 import com.myapp.adminsapp.core.composables.ProductEditTxtField
 import com.myapp.adminsapp.core.composables.TextfielDropDown
 import com.myapp.adminsapp.core.composables.horizontalSpacer
 import com.myapp.adminsapp.core.composables.verticalSpacer
 import com.myapp.adminsapp.ui.theme.Saffron
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ResourceAsColor")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "ResourceAsColor", "SuspiciousIndentation")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddProductScreen() {
+fun AddProductScreen(
+    viewmodel : AddproductViewmodel
+) {
+
+            val context = LocalContext.current
             Scaffold(modifier = Modifier.fillMaxSize(),
                 topBar = {
                     TopAppBar(
                         title = { Text(text = "Add Product") },
                     )
                 }) {
-                val list  = listOf<String>(
-                    "All", "Munchies" , "Dairy" , "Grains"
-                )
+
+
+
+                val ImgUploadState by viewmodel.Imgstate.collectAsState()
+                if (ImgUploadState.isLoading){
+                    CommonDialog()
+                }
+                if (ImgUploadState.succes != null){
+                    context.showMsg(msg = ImgUploadState.succes.toString())
+                }
+
+
                 val expandedValue = remember {
                     mutableStateOf(false)
                 }
@@ -74,7 +95,9 @@ fun AddProductScreen() {
 
                 val multiplePhotoPickerLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.PickMultipleVisualMedia(),
-                    onResult = { uris -> selectedImageUris = uris }
+                    onResult = { uris ->
+                        viewmodel.addImageToStorage(uris)
+                        selectedImageUris = uris }
                 )
                 val name = remember {
                     mutableStateOf("")
@@ -127,7 +150,7 @@ fun AddProductScreen() {
                             width = 170.dp,
                         )
                         horizontalSpacer(8.dp)
-                        TextfielDropDown(category = list, title = unit, label ="unit" ,
+                        TextfielDropDown(category = Unitlist, title = unit, label ="unit" ,
                             expanded = expandedValue,width = 170.dp )
 
                     }
@@ -142,9 +165,9 @@ fun AddProductScreen() {
                         ProductEditTxtField(title = noOfStock, label = "No. of Stock", width = 170.dp,)
                     }
 
-                    TextfielDropDown(category = list, title =  productCategory, label ="product category" ,
+                    TextfielDropDown(category = ProductCategory, title =  productCategory, label ="product category" ,
                         expanded = expandedValue3 , leadingIcon = Icons.Default.Category)
-                    TextfielDropDown(category = list, title = productType, label ="product type" ,
+                    TextfielDropDown(category = ProductType, title = productType, label ="product type" ,
                         expanded = expandedValue2,leadingIcon = Icons.Default.Category )
 
                     verticalSpacer()
@@ -164,31 +187,49 @@ fun AddProductScreen() {
                             imageVector = Icons.Default.AddPhotoAlternate,
                             contentDescription = null,
                             modifier = Modifier.clickable {
-
+                                multiplePhotoPickerLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
                             }
                         )
                     }
-                    LazyRow(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)){
-                        items(selectedImageUris){
+
+                        LazyRow(modifier = Modifier
+                            .fillMaxWidth()
+                            .height(150.dp),
+                            horizontalArrangement = Arrangement.Absolute.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically){
+                            items(selectedImageUris){
                                 AsyncImage(model = it,
-                                    placeholder = painterResource(id = R.drawable.baseline_add_photo_alternate_24) ,
                                     contentDescription =null,
                                     modifier = Modifier
                                         .width(70.dp)
                                         .height(70.dp))
-                        }
+                            }
                     }
 
-                    Button(onClick = { /*TODO*/ },
+
+                    Button(onClick = {
+                                     viewmodel.insertItem(
+                                         item = RealtimeProduct.Product(
+                                             product = name.value ,
+                                             price = price.value.toInt(),
+                                             productCategory = productCategory.value,
+                                             productQuantity = quantity.value.toInt(),
+                                             productUnit = unit.value ,
+                                             productStock = noOfStock.value.toInt(),
+                                             productType = productType.value,
+                                             productImageUris = viewmodel.imageUrl
+                                         )
+                                     )
+                                     },
                         modifier = Modifier
                             .width(340.dp)
                             .height(50.dp),
                         colors = ButtonColors(
                         containerColor = Saffron, contentColor = Color.White, disabledContainerColor = Saffron,
-                        disabledContentColor = Saffron
-                    )) {
+                        disabledContentColor = Saffron)
+                    ) {
                         Text(text = "Save Product")
                     }
 
@@ -201,6 +242,6 @@ fun AddProductScreen() {
 @Preview(showBackground = true)
 @Composable
 fun AddProductScreenPreview() {
-    AddProductScreen()
+    //AddProductScreen(hiltViewModel())
 }
 

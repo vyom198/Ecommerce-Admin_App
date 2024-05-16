@@ -1,21 +1,26 @@
 package com.myapp.adminsapp.auth.data
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.service.autofill.UserData
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.myapp.adminsapp.auth.domain.PhoneAuthRepo
 import com.myapp.adminsapp.core.common.ResultState
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PhoneAuthRepoImpl   @Inject constructor(
-    private val authdb: FirebaseAuth
+    private val authdb: FirebaseAuth,
+    private val firebaseDb : FirebaseFirestore
 ) : PhoneAuthRepo {
 
     private lateinit var onVerificationCode:String
@@ -53,13 +58,25 @@ class PhoneAuthRepoImpl   @Inject constructor(
         }
     }
 
-    override fun signWithCredential(otp: String): Flow<ResultState<String>>  = callbackFlow{
+
+    @SuppressLint("SuspiciousIndentation")
+    override fun signWithCredential(otp: String): Flow<ResultState<SignInResult>>  = callbackFlow{
         trySend(ResultState.Loading)
         val credential = PhoneAuthProvider.getCredential(onVerificationCode,otp)
-        authdb.signInWithCredential(credential)
+            authdb.signInWithCredential(credential)
             .addOnCompleteListener {
-                if(it.isSuccessful)
-                    trySend(ResultState.Success("otp verified"))
+                if(it.isSuccessful){
+                 val user = it.result.user
+                 val result =   SignInResult(
+                        data = user?.run {
+                            Admin(
+                                phone = phoneNumber,
+                            )
+                        },
+                        errorMessage = null
+                    )
+                    trySend(ResultState.Success(result))
+                }
             }.addOnFailureListener {
                 trySend(ResultState.Failure(it))
             }
@@ -67,5 +84,11 @@ class PhoneAuthRepoImpl   @Inject constructor(
             close()
         }
     }
+
+    override fun getSignInUser() = authdb.currentUser?.run {
+         Admin(phone = phoneNumber)
+    }
+
+
 }
 

@@ -14,6 +14,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -55,6 +57,28 @@ class MainActivity : ComponentActivity() {
                             route = Graph.AUTHENTICATION
                         ) {
                             composable(route = AuthScreen.Login.route) {
+                                val state by phoneAuthViewModel.state.collectAsState()
+
+
+                                LaunchedEffect(key1 = Unit) {
+                                    if (phoneAuthViewModel.getSignInUser() != null) {
+                                        navController.navigate(Graph.HOME)
+                                    }
+                                }
+
+                                LaunchedEffect(key1 = state.isSignInSuccessful) {
+                                    Log.d("state of sign in ", state.isSignInSuccessful.toString())
+                                    if (state.isSignInSuccessful) {
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            "Sign in successful",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+
+                                        navController.navigate(Graph.HOME)
+                                        phoneAuthViewModel.resetState()
+                                    }
+                                }
                               LoginWithPhone(phoneAuthViewModel =phoneAuthViewModel,
                                   navController = navController,
                                   this@MainActivity
