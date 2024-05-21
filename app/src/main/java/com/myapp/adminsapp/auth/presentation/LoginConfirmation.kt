@@ -34,9 +34,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.myapp.adminsapp.auth.data.SignInResult
-import com.myapp.adminsapp.core.common.OtpView
+
 import com.myapp.adminsapp.core.common.ResultState
 import com.myapp.adminsapp.core.common.showMsg
+import com.myapp.adminsapp.core.composables.OtpView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

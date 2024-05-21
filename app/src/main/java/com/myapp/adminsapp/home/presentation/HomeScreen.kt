@@ -3,15 +3,23 @@ package com.myapp.adminsapp.home.presentation
 import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -33,19 +41,21 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.myapp.adminsapp.addproduct.presentation.AddProductScreen
+
 import com.myapp.adminsapp.core.common.ProductCategory
+import com.myapp.adminsapp.core.composables.CardItem
+import com.myapp.adminsapp.core.composables.horizontalSpacer
 import com.myapp.adminsapp.core.composables.verticalSpacer
+import com.myapp.adminsapp.ui.theme.Saffron
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
-     var query  by remember{
-         mutableStateOf("")
-     }
-    var active  by remember{
-        mutableStateOf(false)
-    }
+fun HomeScreen(
+    onClickProducts : () -> Unit ,
+    onClickCategories : () -> Unit
+) {
+
     Scaffold(modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
@@ -63,28 +73,41 @@ fun HomeScreen() {
 
         ) {
             verticalSpacer()
-           SearchBar(
-               query = query,
-               onQueryChange = { query = it },
-               onSearch = {
 
-               },
-               active = active,
-               onActiveChange = {
-                   active = !active
-               },
-               placeholder = {
-                   Text(text = "Search")
-               },
-               leadingIcon = {
-                   Icon(imageVector =Icons.Default.Search , contentDescription =null )
-               }, shape = RectangleShape,
-
-           ) {
+            verticalSpacer()
+            LazyVerticalGrid(GridCells.Fixed(2),modifier = Modifier.padding(
+                horizontal = 10.dp, vertical = 10.dp
+            )
+                ) {
 
 
-           }
+                item {
+                    CardItem(onClick = { /*TODO*/ }, text = "users" )
+                }
+                item {
+                     CardItem(onClick = onClickProducts, text = "All Products" )
+                }
 
+                item {
+                    CardItem(onClick = onClickCategories, text = "Categories", )
+
+                }
+                item {
+                    CardItem(onClick = { /*TODO*/ }, text = "Cancelled Orders", )
+
+                }
+                item {
+                    CardItem(onClick = { /*TODO*/ }, text = "Delivered Products", )
+
+                }
+                item {
+                    CardItem(onClick = { /*TODO*/ }, text = "Banners", )
+
+                }
+                item{
+                    CardItem(onClick =  {}, text =  "Pending Orders")
+                }
+            }
 
           }
 
@@ -95,4 +118,5 @@ fun HomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()}
+    //HomeScreen()
+}

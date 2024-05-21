@@ -1,18 +1,34 @@
 [versions]
 agp = "8.2.0"
 kotlin = "1.9.0"
-core-ktx = "1.12.0"
+core-ktx = "1.13.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-lifecycle-runtime-ktx = "2.7.0"
-activity-compose = "1.8.2"
-compose-bom = "2024.02.02"
+lifecycle-runtime-ktx = "2.8.0"
+activity-compose = "1.9.0"
+compose-bom = "2024.05.00"
 navigation = "2.7.7"
-play-services-auth = "21.0.0"
-firebase-common-ktx = "22.3.1"
+play-services-auth = "21.1.1"
+firebase-common-ktx = "23.0.0"
 coil = "2.5.0"
-hilt-version = "2.48.1"
+hilt-version = "2.49"
+androidx_test_core = "1.5.0"
+
+androidx_arch_core_testing = "2.2.0"
+kotlinx_coroutines_test = "1.6.1"
+truth = "1.1.3"
+mockwebserver = "4.9.1"
+mockk = "1.12.0"
+compose_ui_test_manifest = "1.6.7"
+hilt_android_testing = "2.37"
+
+hilt_android_compiler = "2.48.1"
+
+androidx_test_core_ktx = "1.5.0"
+
+androidx_test_runner = "1.5.2"
+
 
 [libraries]
 
@@ -20,27 +36,29 @@ core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx
 firebase-firestore = {module = "com.google.firebase:firebase-firestore-ktx"}
 firebase-database = {module = "com.google.firebase:firebase-database-ktx"}
 firebase-auth = { module = "com.google.firebase:firebase-auth-ktx"}
-firebase-bom = {module = "com.google.firebase:firebase-bom", version = "32.8.1"}
+firebase-bom = {module = "com.google.firebase:firebase-bom", version = "33.0.0"}
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-lifecycle-viewmodel-compose = {module = "androidx.lifecycle:lifecycle-viewmodel-compose",version="2.7.0"}
+lifecycle-viewmodel-compose = {module = "androidx.lifecycle:lifecycle-viewmodel-compose",version="2.8.0"}
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 ui = { group = "androidx.compose.ui", name = "ui" }
+
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
 material3 = { group = "androidx.compose.material3", name = "material3" }
 material-icon-extended  = { module = "androidx.compose.material:material-icons-extended "}
 navigation = {module = "androidx.navigation:navigation-compose",version.ref = "navigation"}
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 firebase-common-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebase-common-ktx" }
 coil = {module = "io.coil-kt:coil-compose",version.ref = "coil"}
-coroutine-lifecycle-viewmodel = {module ="androidx.lifecycle:lifecycle-viewmodel-ktx",version="2.7.0"}
+coroutine-lifecycle-viewmodel = {module ="androidx.lifecycle:lifecycle-viewmodel-ktx",version="2.8.0"}
 
 hilt-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-version"}
 hilt-android = {module = "com.google.dagger:hilt-android", version.ref = "hilt-version"}
@@ -48,7 +66,21 @@ hilt-navigation = {module = "androidx.hilt:hilt-navigation-compose",version = "1
 accompanist = {module = "com.google.accompanist:accompanist-swiperefresh", version = "0.27.0"}
 firebase-storage = {module = "com.google.firebase:firebase-storage-ktx"}
 
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+androidx_test_core = { group = "androidx.test", name = "core", version.ref = "androidx_test_core" }
+androidx_arch_core_testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "androidx_arch_core_testing" }
+kotlinx_coroutines_test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx_coroutines_test" }
+truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
+compose_ui_test_manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose_ui_test_manifest" }
+hilt_android_testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt_android_testing" }
+hilt_android_compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt_android_compiler" }
+androidx_test_core_ktx = { group = "androidx.test", name = "core-ktx", version.ref = "androidx_test_core_ktx" }
+androidx_test_runner = { group = "androidx.test", name = "runner", version.ref = "androidx_test_runner" }
+
+
 [plugins]
+
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 hilt-android = {id = "com.google.dagger.hilt.android",version.ref = "hilt-version"}

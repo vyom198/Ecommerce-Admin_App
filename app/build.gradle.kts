@@ -63,13 +63,11 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
+
+    //debug
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
     implementation(libs.play.services.auth)
     implementation(libs.firebase.common.ktx)
     implementation(libs.firebase.database)
@@ -87,6 +85,35 @@ dependencies {
 
     implementation(libs.navigation)
     implementation(libs.accompanist)
+
+    androidTestImplementation(libs.mockk)
+
+    // Local unit tests
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.mockk)
+    debugImplementation(libs.compose.ui.test.manifest)
+
+    // Instrumentation tests
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.testing)
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.androidx.arch.core.testing)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.truth)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.core.ktx)
+    androidTestImplementation(libs.mockwebserver)
+    androidTestImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.runner)
+
 
 
 }
