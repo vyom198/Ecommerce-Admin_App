@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="AddProductScreenPreview">
-        <State />
-      </entry>
       <entry key="AddProductScreenPreview (1)">
         <State />
       </entry>
@@ -12,12 +9,6 @@
         <State />
       </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="loginphonecodepreview">
-        <State />
-      </entry>
-      <entry key="loginphonepreview">
         <State />
       </entry>
     </value>

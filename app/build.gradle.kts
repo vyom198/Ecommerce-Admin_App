@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("junit:junit:4.12")
 
     //debug
     debugImplementation(libs.ui.tooling)
@@ -96,6 +98,7 @@ dependencies {
     testImplementation(libs.truth)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.mockk)
+    testImplementation(libs.robolectric)
     debugImplementation(libs.compose.ui.test.manifest)
 
     // Instrumentation tests

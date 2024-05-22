@@ -14,6 +14,12 @@ class AddProductUsecaseImpl @Inject constructor(
     }
 
     override suspend fun insertProduct(item: RealtimeProduct.Product): ResultState<Boolean> {
-      return repo.insert(item)
+        return try {
+            repo.insert(item)
+            ResultState.Success(true)
+        } catch (exception: Exception) {
+            ResultState.Failure(exception)
+        }
+
     }
 }
