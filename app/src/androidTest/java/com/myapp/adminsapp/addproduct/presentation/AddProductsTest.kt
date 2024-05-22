@@ -40,7 +40,7 @@ class AddProductsTest {
                     startDestination = BottomNavScreen.AddProduct.route
                 ) {
                     composable(route =  BottomNavScreen.AddProduct.route) {
-                        AddProductScreen(viewmodel = viewmodel )
+                        AddProductScreen(viewmodel = viewmodel)
                     }
                 }
 

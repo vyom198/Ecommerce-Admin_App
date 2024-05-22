@@ -22,7 +22,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          cache : gradle
+
 
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
