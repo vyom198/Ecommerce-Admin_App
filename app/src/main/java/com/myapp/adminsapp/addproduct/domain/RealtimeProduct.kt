@@ -1,4 +1,4 @@
-package com.myapp.adminsapp.addproduct.data
+package com.myapp.adminsapp.addproduct.domain
 
 data class RealtimeProduct(
     val item: Product?,

@@ -1,9 +1,7 @@
 package com.myapp.adminsapp.addproduct.domain
 
 import android.net.Uri
-import com.myapp.adminsapp.addproduct.data.RealtimeProduct
 import com.myapp.adminsapp.core.common.ResultState
-import kotlinx.coroutines.flow.Flow
 
 interface addProductRepo {
 

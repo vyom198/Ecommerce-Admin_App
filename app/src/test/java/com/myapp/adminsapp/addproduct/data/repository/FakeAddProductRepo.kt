@@ -2,7 +2,7 @@ package com.myapp.adminsapp.addproduct.data.repository
 
 import android.net.Uri
 import android.util.Log
-import com.myapp.adminsapp.addproduct.data.RealtimeProduct
+import com.myapp.adminsapp.addproduct.domain.RealtimeProduct
 import com.myapp.adminsapp.addproduct.domain.addProductRepo
 import com.myapp.adminsapp.core.common.ResultState
 

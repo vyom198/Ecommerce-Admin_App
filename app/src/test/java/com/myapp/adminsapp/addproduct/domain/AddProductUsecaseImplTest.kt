@@ -1,16 +1,12 @@
 package com.myapp.adminsapp.addproduct.domain
 
 import android.net.Uri
-import com.myapp.adminsapp.addproduct.data.RealtimeProduct
 import com.myapp.adminsapp.addproduct.data.repository.FakeAddProductRepo
 import com.myapp.adminsapp.core.common.ResultState
-import io.mockk.every
-import io.mockk.mockk
 
 import kotlinx.coroutines.runBlocking
 
 
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert.*
@@ -22,13 +18,13 @@ import org.robolectric.annotation.Config
 @Config(manifest=Config.NONE)
 class AddProductUsecaseImplTest {
 
-    private lateinit var  addProductUsecase :AddProductUsecaseImpl
+    private lateinit var  addProductUsecase :AddProductUsecase
     private lateinit var fakeAddProductRepo: FakeAddProductRepo
 
     @Before
     fun setUp() {
         fakeAddProductRepo = FakeAddProductRepo()
-        addProductUsecase = AddProductUsecaseImpl(fakeAddProductRepo)
+        addProductUsecase = AddProductUsecase(fakeAddProductRepo)
     }
 
 

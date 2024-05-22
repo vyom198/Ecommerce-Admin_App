@@ -1,16 +1,12 @@
 package com.myapp.adminsapp.allProducts.presentation
 
-import androidx.compose.runtime.MutableState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myapp.adminsapp.addproduct.data.RealtimeProduct
-import com.myapp.adminsapp.allProducts.data.allProductRepoImpl
 import com.myapp.adminsapp.allProducts.domain.DomainProduct
 import com.myapp.adminsapp.allProducts.domain.allProductsRepo
 import com.myapp.adminsapp.core.common.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
