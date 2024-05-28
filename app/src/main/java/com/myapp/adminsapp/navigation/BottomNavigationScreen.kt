@@ -105,7 +105,9 @@ fun HomeNavGraph(navController: NavHostController) {
                OrderedProducts()
             }
           composable(route = BottomNavScreen.AllProducts.route){
-              AllProducts()
+              AllProducts(viewmodel = hiltViewModel(), onBackClick = {
+                  navController.navigateSingleTopTo(BottomNavScreen.Home.route)
+              })
           }
         composable(route = BottomNavScreen.Categories.route){
            // CategoriesScreen()

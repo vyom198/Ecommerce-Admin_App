@@ -1,5 +1,6 @@
 package com.myapp.adminsapp.allProducts.data
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.myapp.adminsapp.allProducts.domain.DomainProduct
 import com.myapp.adminsapp.allProducts.domain.allProductsRepo
@@ -15,7 +16,7 @@ class allProductRepoImpl @Inject constructor(
 ) : allProductsRepo{
     override suspend fun getAllProducts(): Flow<ResultState<List<DomainProduct>>> =callbackFlow{
         trySend(ResultState.Loading)
-        val listenerRegistration = firedb.collection("AllProducts")
+        val listenerRegistration = firedb.collection("AllProduct")
             .addSnapshotListener { snapshot, exception ->
                 if (exception != null) {
                     trySend(ResultState.Failure(exception))
@@ -27,17 +28,18 @@ class allProductRepoImpl @Inject constructor(
                       DomainProduct(
                             item = DomainProduct.Product(
                                 product = document["product"] as String?,
-                                price = document["price"] as Int?,
-                                productQuantity = document["productQuantity"] as Int?,
+                                price = (document["price"] as Long?)?.toInt(),
+                                productQuantity = (document["productQuantity"] as Long?)?.toInt(),
                                 productUnit = document["productUnit"] as String?,
                                 productCategory = document["productCategory"] as String?,
                                 productType = document["productType"] as String?,
-                                productImageUris = document["productImageUris"] as List<String>?
+                                productImageUris = document["productImageUris"]as List<String>?
 
                             ),
                             key = document.id
                         )
                     }
+                    Log.d("repo", items.toString())
                     trySend(ResultState.Success(items))
                 }
             }

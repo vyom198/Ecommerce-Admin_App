@@ -12,7 +12,7 @@ data class DomainProduct(
         val productCategory: String? = "",
         val productType: String ? = "",
         val ItemCount: Int? = null,
-        val productImageUris: List<String>? = null
+        val productImageUris: List<String>? = emptyList()
 
     )
 }

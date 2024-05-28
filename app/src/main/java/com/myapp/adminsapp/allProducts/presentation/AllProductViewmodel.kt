@@ -1,5 +1,6 @@
 package com.myapp.adminsapp.allProducts.presentation
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myapp.adminsapp.allProducts.domain.DomainProduct
@@ -32,20 +33,28 @@ class AllProductViewmodel @Inject constructor(
                          _state.update {
                              it.copy(
                                  item = result.data
+                                  , isLoading = false,
+                                 error = null
                              )
+
                          }
+                         Log.d("viewmodel", result.toString())
                      }
                          is ResultState.Failure -> {
                              _state.update {
                                  it.copy(
-                                     error = it.error
+                                     error = it.error ,
+                                     item = emptyList()
+                                     , isLoading = false,
                                  )
                              }
                          }
                          is ResultState.Loading -> {
                              _state.update {
                                  it.copy(
-                                     isLoading = true
+                                     isLoading = true,
+                                     error = null,
+                                     item = emptyList()
                                  )
                              }
                          }

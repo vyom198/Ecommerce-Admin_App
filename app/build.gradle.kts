@@ -116,6 +116,8 @@ dependencies {
     androidTestImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.test.runner)
 
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicator)
 
 
 }

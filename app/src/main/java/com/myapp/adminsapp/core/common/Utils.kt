@@ -20,9 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.RectangleShape
 import com.myapp.adminsapp.addproduct.domain.RealtimeProduct
 import com.myapp.adminsapp.allProducts.domain.DomainProduct
+import java.text.NumberFormat
+import java.util.Locale
 
 
-    const val OTP_VIEW_TYPE_NONE = 0
+const val OTP_VIEW_TYPE_NONE = 0
     const val OTP_VIEW_TYPE_UNDERLINE = 1
     const val OTP_VIEW_TYPE_BORDER = 2
 
@@ -60,6 +62,12 @@ fun Context.showMsg(
     duration:Int = Toast.LENGTH_SHORT
 ) = Toast.makeText(this,msg,duration).show()
 
+
+
+fun formatCurrency(amount: Double, locale: Locale = Locale("hi", "IN")): String {
+    val currencyFormatter = NumberFormat.getCurrencyInstance(locale)
+    return currencyFormatter.format(amount)
+}
 val Unitlist = listOf<String>(
     "Kg","ml","Ltr","Packets","gm"
 )
