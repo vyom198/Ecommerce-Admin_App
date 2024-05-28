@@ -2,6 +2,7 @@
 .gradle
 /local.properties
 /app/src/google-services.json
+/google-services.json.base64
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
