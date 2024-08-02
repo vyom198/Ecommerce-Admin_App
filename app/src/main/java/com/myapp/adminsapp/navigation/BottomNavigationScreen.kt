@@ -15,6 +15,7 @@ import com.myapp.adminsapp.addproduct.presentation.AddProductScreen
 import com.myapp.adminsapp.home.presentation.HomeScreen
 import com.myapp.adminsapp.addproduct.presentation.OrderedProducts
 import com.myapp.adminsapp.allProducts.presentation.AllProducts
+import com.myapp.adminsapp.categories.presentation.CategoriesScreen
 import com.myapp.adminsapp.core.common.navigateSingleTopTo
 
 
@@ -87,11 +88,12 @@ fun HomeNavGraph(navController: NavHostController) {
     ) {
         composable(route = BottomNavScreen.Home.route) {
             HomeScreen( onClickCategories = {
-
+                         navController.navigateSingleTopTo(BottomNavScreen.Categories.route)
                     },
                 onClickProducts = {
                     navController.navigateSingleTopTo(BottomNavScreen.AllProducts.route)
-                }
+                },
+
                 )
         }
 
@@ -110,7 +112,7 @@ fun HomeNavGraph(navController: NavHostController) {
               })
           }
         composable(route = BottomNavScreen.Categories.route){
-           // CategoriesScreen()
+            CategoriesScreen(viewmodel = hiltViewModel())
         }
 
 
