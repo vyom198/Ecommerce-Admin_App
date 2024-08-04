@@ -112,7 +112,9 @@ fun HomeNavGraph(navController: NavHostController) {
               })
           }
         composable(route = BottomNavScreen.Categories.route){
-            CategoriesScreen(viewmodel = hiltViewModel())
+            CategoriesScreen(viewmodel = hiltViewModel(), onBackClick = {
+                navController.popBackStack()
+            })
         }
 
 
