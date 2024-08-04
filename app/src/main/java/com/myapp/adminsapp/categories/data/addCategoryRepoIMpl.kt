@@ -7,13 +7,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.myapp.adminsapp.addproduct.domain.RealtimeProduct
 import com.myapp.adminsapp.addproduct.domain.addProductRepo
+import com.myapp.adminsapp.allProducts.domain.DomainProduct
 import com.myapp.adminsapp.categories.domain.addCategoryRepo
 import com.myapp.adminsapp.core.common.ResultState
 import com.myapp.adminsapp.core.dataprovider.di.IoDispatcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
@@ -81,6 +85,38 @@ class addCategoryRepoIMpl @Inject constructor(
 
         }
 
+    override suspend fun getAllCategories(): Flow<ResultState<List<RealtimeCategory>>> =
+        callbackFlow{
+            trySend(ResultState.Loading)
+            val listenerRegistration = db.collection("AllCategories")
+                .addSnapshotListener { snapshot, exception ->
+                    if (exception != null) {
+                        trySend(ResultState.Failure(exception))
+                        return@addSnapshotListener
+                    }
+
+                    snapshot?.let {
+                        val items = it.documents.map { document ->
+                            RealtimeCategory(
+                                item =  RealtimeCategory.Category1(
+                                    CategoryType = document["categoryType "] as String?,
+                                    CategoryName = document["categoryName"] as String?,
+                                    image =   document["image"] as String?
+                                ),
+                                key = document.id
+                            )
+
+                        }
+                        Log.d("repo", items.toString())
+                        trySend(ResultState.Success(items))
+                    }
+                }
+
+            awaitClose {
+                listenerRegistration.remove()
+                close()
+            }
+    }
 
 
 }

@@ -9,12 +9,17 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
@@ -23,6 +28,7 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.myapp.adminsapp.allProducts.presentation.LazyProductItem
 import com.myapp.adminsapp.categories.data.Category
 import com.myapp.adminsapp.core.common.ProductType
 import com.myapp.adminsapp.core.common.showMsg
@@ -65,7 +72,7 @@ fun CategoriesScreen(
     onBackClick : () -> Unit
 ) {
     val ImgUploadState by viewmodel.Imgstate.collectAsState()
-
+    val categoryState by viewmodel.Categorystate.collectAsState()
     val productCategory = remember {
         viewmodel.productCategory
     }
@@ -153,8 +160,25 @@ fun CategoriesScreen(
                         categoryDialog = false
                     })
             }
+            if (categoryState.error != null){
+                Text(text = "error occoured") }
+            if(categoryState.isLoading){
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                    CircularProgressIndicator() }
+            }else{
+                val result = categoryState.item
+                Column(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)) {
 
+                    LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize().padding(10.dp)){
+                        items(result){
 
+                        }
+
+                    }
+                }
+            }
 
         }
     }
@@ -203,7 +227,9 @@ fun CategoriesScreen(
                     }
                     verticalSpacer(12.dp)
                     AsyncImage(model = selectedImageUri.value , contentDescription =null,
-                        modifier =  Modifier.width(60.dp).height(60.dp))
+                        modifier = Modifier
+                            .width(60.dp)
+                            .height(60.dp))
                     ProductEditTxtField(title = CategoryName, label = "Add Category ")
                     verticalSpacer()
                     TextfielDropDown(

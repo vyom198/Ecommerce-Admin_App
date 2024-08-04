@@ -8,13 +8,17 @@ import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.myapp.adminsapp.allProducts.domain.DomainProduct
+import com.myapp.adminsapp.allProducts.presentation.AllProductsState
 import com.myapp.adminsapp.categories.data.Category
+import com.myapp.adminsapp.categories.data.RealtimeCategory
 import com.myapp.adminsapp.categories.domain.addCategoryRepo
 import com.myapp.adminsapp.core.common.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,6 +31,10 @@ class CategoryViewmodel @Inject constructor(
 ): ViewModel() { 
     private val _Imgstate = MutableStateFlow(CategoryImageUploadState())
     val Imgstate = _Imgstate.asStateFlow()
+
+    private  val _Categorystate = MutableStateFlow(AllCategoryState())
+    val Categorystate = _Categorystate.asStateFlow()
+
     private var addImagesToStorageResponse by mutableStateOf<ResultState<Uri>>(ResultState.Loading)
     var imageUrl = mutableStateOf("")
 
@@ -37,9 +45,55 @@ class CategoryViewmodel @Inject constructor(
         private set
     var selectedImageuri = mutableStateOf("".toUri())
         private set
+    init {
+      getAllCategores()
+    }
+    private fun getAllCategores(){
+        viewModelScope.launch {
+            repo.getAllCategories().collectLatest { result ->
+                when (result) {
+
+                    is ResultState.Success -> {
+                        _Categorystate.update {
+                            it.copy(
+                                item = result.data
+                                , isLoading = false,
+                                error = null
+                            )
+
+                        }
+                        Log.d("viewmodel", result.toString())
+                    }
+                    is ResultState.Failure -> {
+                        _Categorystate.update {
+                            it.copy(
+                                error = it.error ,
+                                item = emptyList()
+                                , isLoading = false,
+                            )
+                        }
+                    }
+                    is ResultState.Loading -> {
+                        _Categorystate.update {
+                            it.copy(
+                                isLoading = true,
+                                error = null,
+                                item = emptyList()
+                            )
+                        }
+                    }
+                }
 
 
-    fun resetFields() {
+            }
+        }
+    }
+
+
+
+
+
+fun resetFields() {
         viewModelScope.launch {
             productCategory.value = ""
             productType.value = ""
@@ -111,4 +165,9 @@ data class CategoryImageUploadState(
     val success : String ? = null,
     val isLoading: Boolean =false,
     val error : String ? = "error",
+)
+data class AllCategoryState(
+    val item : List<RealtimeCategory> = emptyList(),
+    val isLoading : Boolean = false,
+    val error : String? = null
 )
